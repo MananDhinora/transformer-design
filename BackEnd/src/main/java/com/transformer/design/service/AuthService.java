@@ -4,9 +4,8 @@ import com.transformer.design.DTO.UserDTO;
 import com.transformer.design.model.UserData;
 import com.transformer.design.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,14 +40,16 @@ public class AuthService {
             authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
         }
-        catch (Exception e) {
-            log.atError().log("user {} not authenticated, error occurred:", input.getEmail(), e);
-            new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        catch (InternalAuthenticationServiceException e) {
+            log.atError().log("No user named {} found", input.getEmail());
         }
-        authenticationManager
-            .authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
-
-        return userRepository.findByEmail(input.getEmail()).orElseThrow();
+        try {
+            return userRepository.findByEmail(input.getEmail());
+        }
+        catch (Exception e) {
+            log.atError().log("Error while authenticating {}", input.getEmail(), e);
+        }
+        return null;
     }
 
 }
