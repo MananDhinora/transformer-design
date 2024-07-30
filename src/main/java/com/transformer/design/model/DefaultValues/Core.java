@@ -1,4 +1,4 @@
-package com.transformer.design.model.DefaultValuesDataFields;
+package com.transformer.design.model.DefaultValues;
 
 import lombok.Builder;
 import lombok.Data;

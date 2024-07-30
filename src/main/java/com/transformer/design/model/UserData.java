@@ -15,7 +15,7 @@ import java.util.List;
 *
 * Creates a new Collection names user
 */
-@Document(value = "user")
+@Document(value = "UserData")
 @Data
 @Builder
 public class UserData implements UserDetails {
@@ -39,22 +39,26 @@ public class UserData implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+//        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+//        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+//        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+//        return UserDetails.super.isEnabled();
+        return true;
     }
 
 }

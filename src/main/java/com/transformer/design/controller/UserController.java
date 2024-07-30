@@ -53,7 +53,7 @@ public class UserController {
      *
      * returns jwt and its expiration time, return type : ResponseEntity<?>
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDTO loginUserDTO) {
         try {
             UserData authenticatedUser = authService.authenticate(loginUserDTO);

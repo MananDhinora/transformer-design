@@ -37,17 +37,8 @@ public class AuthService {
     }
 
     public UserData authenticate(UserDTO input) {
-        try {
             authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
-        }
-        catch (Exception e) {
-            log.atError().log("user {} not authenticated, error occurred:", input.getEmail(), e);
-            new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        authenticationManager
-            .authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
-
         return userRepository.findByEmail(input.getEmail()).orElseThrow();
     }
 
