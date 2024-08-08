@@ -28,8 +28,7 @@ public class UserController {
      *
      * Creates a new user and encrypts the password before storing in MongoDB
      *
-     * returns a UserData of the newly created user, return type :
-     * ResponseEntity<UserData>
+     * returns a UserData of the newly created user, return type : ResponseEntity<?>
      */
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)

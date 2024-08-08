@@ -1,6 +1,8 @@
 package com.transformer.design.model.DefaultValues;
 
+import lombok.Data;
 
+@Data
 public class DefaultValues {
 
     private Assumed assumed;
@@ -18,4 +20,5 @@ public class DefaultValues {
     private Performance performance;
 
     private MaterialCost materialCost;
+
 }

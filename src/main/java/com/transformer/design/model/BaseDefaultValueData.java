@@ -12,10 +12,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseDefaultValueData {
+
     @Id
     private String id;
 
-    private String  baseValueType;
+    private String baseValueType;
 
     private DefaultValues defaultValues;
+
 }

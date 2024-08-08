@@ -8,6 +8,8 @@ import lombok.Data;
 @Builder
 public class DefaultValuesDTO {
 
+    private String id;
+
     private String user_id;
 
     private String baseValueType;

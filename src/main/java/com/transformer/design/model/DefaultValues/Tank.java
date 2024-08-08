@@ -7,18 +7,18 @@ import lombok.Data;
 @Builder
 public class Tank {
 
-    private Float OilQuantity;
+  private Float OilQuantity;
 
-    private Float SurfaceLossDissipation;
+  private Float SurfaceLossDissipation;
 
-    private Float WallSheetThickness;
+  private Float WallSheetThickness;
 
-    private Float TopCoverSheetThickness;
+  private Float TopCoverSheetThickness;
 
-    private Float BottomSheetThickness;
+  private Float BottomSheetThickness;
 
-    private Float WindingToWallAndClearance;
+  private Float WindingToWallAndClearance;
 
-    private Float AmountOfConservatorBelowKVA;
+  private Float AmountOfConservatorBelowKVA;
 
 }

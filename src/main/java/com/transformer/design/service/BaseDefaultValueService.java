@@ -25,7 +25,7 @@ public class BaseDefaultValueService {
                 log.atInfo().log("the base value \"{}\" is not in the database", valueType);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            log.atInfo().log("loading the default value: {}", baseValue);
+            log.atInfo().log("loading the default value: {}", baseValue.getBaseValueType());
             return new ResponseEntity<>(baseValue.getDefaultValues(), HttpStatus.OK);
         }
         catch (Exception e) {
