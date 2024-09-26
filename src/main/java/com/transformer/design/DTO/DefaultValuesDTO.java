@@ -10,9 +10,9 @@ public class DefaultValuesDTO {
 
     private String id;
 
-    private String user_id;
+    private String userId;
 
-    private String baseValueType;
+    private String valueType;
 
     private DefaultValues defaultValues;
 
