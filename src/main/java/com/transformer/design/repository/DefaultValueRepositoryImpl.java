@@ -18,18 +18,17 @@ public class DefaultValueRepositoryImpl {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public DefaultValueData update(DefaultValuesDTO input) {
+    public void update(DefaultValuesDTO input) {
         try {
             Query query = new Query()
                 .addCriteria(Criteria.where("userId").is(input.getUserId()).and("valueType").is(input.getValueType()));
             Update updateDefinition = new Update().set("defaultValues", input.getDefaultValues());
             FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true).upsert(true);
-            return mongoTemplate.findAndModify(query, updateDefinition, options, DefaultValueData.class);
+            mongoTemplate.findAndModify(query, updateDefinition, options, DefaultValueData.class);
         }
         catch (Exception e) {
             log.atError().log("error executing query for user {}", input.getUserId(), e);
         }
-        return null;
     }
 
     public DefaultValueData findDefaultValueDocument(String userId, String valueType) {

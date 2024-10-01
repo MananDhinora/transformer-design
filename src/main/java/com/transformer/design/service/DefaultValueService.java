@@ -70,7 +70,7 @@ public class DefaultValueService {
     public ResponseEntity<?> setValue(DefaultValuesDTO defaultValues) {
         try {
             defaultValueRepositoryImpl.update(defaultValues);
-            return new ResponseEntity<>("New defaultValue is created", HttpStatus.OK);
+            return new ResponseEntity<>("defaultValue is updated", HttpStatus.OK);
         }
         catch (Exception e) {
             log.atError().log("error:", e);
