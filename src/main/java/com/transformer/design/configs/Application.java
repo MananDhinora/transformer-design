@@ -1,6 +1,7 @@
 package com.transformer.design.configs;
 
 import com.transformer.design.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /*
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 * passwordEncoding using the crypt password encoder
 * And other authentication manager functions
  */
+@Slf4j
 @Configuration
 public class Application {
 
@@ -29,8 +30,13 @@ public class Application {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        try {
+            return userRepository::findByEmail;
+        }
+        catch (Exception e) {
+            log.atWarn().log("User not found");
+            return null;
+        }
     }
 
     @Bean
