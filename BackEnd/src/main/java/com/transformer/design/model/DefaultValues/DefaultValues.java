@@ -21,4 +21,8 @@ public class DefaultValues {
 
     private MaterialCost materialCost;
 
+    private Clearance clearance;
+
+    private Insulation insulation;
+
 }
