@@ -1,6 +1,4 @@
-import PropTypes from "prop-types";
-import * as React from "react";
-
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -8,11 +6,17 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import ToggleColorMode from "../ThemeToggle/themetoggle";
+
 const logoStyle = {
   width: "140px",
   height: "auto",
@@ -20,28 +24,21 @@ const logoStyle = {
 };
 
 function NavBar({ mode, toggleColorMode }) {
-  console.log("NavBar received mode:", mode);
-  console.log("NavBar received toggleColorMode:", toggleColorMode);
-
+  const { user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-
-  // const scrollToSection = (sectionId) => {
-  //   const sectionElement = document.getElementById(sectionId);
-  //   const offset = 128;
-  //   if (sectionElement) {
-  //     const targetScroll = sectionElement.offsetTop - offset;
-  //     sectionElement.scrollIntoView({ behavior: "smooth" });
-  //     window.scrollTo({
-  //       top: targetScroll,
-  //       behavior: "smooth",
-  //     });
-  //     setOpen(false);
-  //   }
-  // };
 
   return (
     <div>
@@ -123,26 +120,76 @@ function NavBar({ mode, toggleColorMode }) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component="a"
-                href="/login"
-                target="_blank"
-              >
-                Log in
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component="a"
-                href="/signup"
-                target="_blank"
-              >
-                Sign up
-              </Button>
+              {user ? (
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography variant="body2" sx={{ color: "text.primary" }}>
+                    {user.email}
+                  </Typography>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    sx={{ color: "text.primary" }}
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem
+                      component={RouterLink}
+                      to="/profile"
+                      onClick={handleClose}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>My Account</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        logout();
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              ) : (
+                <>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    size="small"
+                    component={RouterLink}
+                    to="/login"
+                  >
+                    Log in
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    component={RouterLink}
+                    to="/signup"
+                  >
+                    Sign up
+                  </Button>
+                </>
+              )}
             </Box>
             <Box sx={{ display: { sm: "", md: "none" } }}>
               <Button
@@ -176,41 +223,49 @@ function NavBar({ mode, toggleColorMode }) {
                       toggleColorMode={toggleColorMode}
                     />
                   </Box>
-                  <MenuItem href="/">Home</MenuItem>
-                  <MenuItem
-                    component={RouterLink}
-                    to="/dashboard"
-                    sx={{ py: "6px", px: "12px" }}
-                  >
-                    <Typography variant="body2" color="text.primary">
+                  <MenuItem component={RouterLink} to="/">
+                    Home
+                  </MenuItem>
+                  {user && (
+                    <MenuItem component={RouterLink} to="/dashboard">
                       Dashboard
-                    </Typography>
-                  </MenuItem>
+                    </MenuItem>
+                  )}
                   <Divider />
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      component="a"
-                      href="/signup"
-                      target="_blank"
-                      sx={{ width: "100%" }}
-                    >
-                      Sign up
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      component="a"
-                      href="/login"
-                      target="_blank"
-                      sx={{ width: "100%" }}
-                    >
-                      Log in
-                    </Button>
-                  </MenuItem>
+                  {user ? (
+                    <>
+                      <MenuItem component={RouterLink} to="/profile">
+                        Profile
+                      </MenuItem>
+                      <MenuItem>My Account</MenuItem>
+                      <MenuItem onClick={logout}>Logout</MenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <MenuItem>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          component={RouterLink}
+                          to="/signup"
+                          sx={{ width: "100%" }}
+                        >
+                          Sign up
+                        </Button>
+                      </MenuItem>
+                      <MenuItem>
+                        <Button
+                          color="primary"
+                          variant="outlined"
+                          component={RouterLink}
+                          to="/login"
+                          sx={{ width: "100%" }}
+                        >
+                          Log in
+                        </Button>
+                      </MenuItem>
+                    </>
+                  )}
                 </Box>
               </Drawer>
             </Box>
@@ -220,7 +275,7 @@ function NavBar({ mode, toggleColorMode }) {
     </div>
   );
 }
-// Props validation
+
 NavBar.propTypes = {
   mode: PropTypes.oneOf(["dark", "light"]).isRequired,
   toggleColorMode: PropTypes.func.isRequired,

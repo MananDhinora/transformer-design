@@ -1,14 +1,23 @@
 package com.transformer.design.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.transformer.design.DTO.UserDTO;
 import com.transformer.design.model.UserData;
 import com.transformer.design.service.AuthService;
 import com.transformer.design.service.JwtService;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -37,8 +46,7 @@ public class UserController {
         try {
             UserData registeredUser = authService.signup(registeredUserDTO);
             return ResponseEntity.ok(registeredUser);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.atError().log("User {} not created, error:", registeredUserDTO.getEmail(), e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -57,13 +65,14 @@ public class UserController {
         try {
             UserData authenticatedUser = authService.authenticate(loginUserDTO);
             String jwtToken = jwtService.generateToken(authenticatedUser);
-            return new ResponseEntity<>(
-                    "JwtToken: " + jwtToken + "\nToken will expire in:" + jwtService.getExpirationTime(),
-                    HttpStatus.OK);
-        }
-        catch (Exception e) {
-            log.atError().log("User {} was not authenticated, error:", loginUserDTO.getEmail(), e);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwtToken);
+            response.put("expirationTime", jwtService.getExpirationTime());
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("User {} was not authenticated, error:", loginUserDTO.getEmail(), e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

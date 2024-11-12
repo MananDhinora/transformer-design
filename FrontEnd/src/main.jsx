@@ -6,7 +6,9 @@ import DosisFont from "../Fonts/Dosis/Dosis-VariableFont_wght.ttf";
 import App from "./App";
 import DashBoard from "./components/DashBoard/dashboard";
 import LogIn from "./components/Login/login";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import SignUp from "./components/SignUp/signup";
+import { AuthProvider } from "./context/AuthContext";
 // import "./index.css";
 const getDesignTokens = (mode) => ({
   palette: {
@@ -49,49 +51,55 @@ function ThemedApp() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/*"
-              element={
-                <App mode={mode} toggleColorMode={colorMode.toggleColorMode} />
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <SignUp
-                  mode={mode}
-                  toggleColorMode={colorMode.toggleColorMode}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <LogIn
-                  mode={mode}
-                  toggleColorMode={colorMode.toggleColorMode}
-                />
-              }
-            />
-            <Route path="/tests" />
-            <Route
-              path="/dashboard"
-              element={
-                <DashBoard
-                  mode={mode}
-                  toggleColorMode={colorMode.toggleColorMode}
-                />
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/*"
+                element={
+                  <App
+                    mode={mode}
+                    toggleColorMode={colorMode.toggleColorMode}
+                  />
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <SignUp
+                    mode={mode}
+                    toggleColorMode={colorMode.toggleColorMode}
+                  />
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <LogIn
+                    mode={mode}
+                    toggleColorMode={colorMode.toggleColorMode}
+                  />
+                }
+              />
+              {/* <Route path="/tests" element={<CADViewer />} /> */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashBoard
+                      mode={mode}
+                      toggleColorMode={colorMode.toggleColorMode}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
       </CssBaseline>
     </ThemeProvider>
   );
 }
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

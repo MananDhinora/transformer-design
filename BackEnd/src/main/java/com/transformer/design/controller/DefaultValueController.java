@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
+@RestController
 @RequestMapping("/default")
 public class DefaultValueController {
 
