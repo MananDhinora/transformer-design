@@ -14,9 +14,8 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import NavBar from "../NavBar/navbar";
-// import { useNavigate } from "react-router-dom";
-// import { AuthControllerService } from "../../api-client";
+import { useNavigate } from "react-router-dom";
+import { UserControllerService } from "../../middleware-api";
 
 function Copyright(props) {
   return (
@@ -39,7 +38,7 @@ function Copyright(props) {
 export default function SignUp({ mode, toggleColorMode }) {
   //   const navigate = useNavigate();
   const [signupRequest, setSignupRequest] = useState({
-    username: "",
+    // username: "",
     email: "",
     password: "",
   });
@@ -49,14 +48,24 @@ export default function SignUp({ mode, toggleColorMode }) {
     const { name, value } = e.target;
     setSignupRequest((prev) => ({ ...prev, [name]: value }));
   };
+  const navigate = useNavigate();
+
+  const [toAccepted, setTOSAccepted] = useState(false);
+  const handleTOSChange = (event) => {
+    setTOSAccepted(event.target.checked);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrorMsg([]);
 
     try {
-      //   const response = await AuthControllerService.registerUser(signupRequest);
-      //   console.log("Registration successful:", response);
-      //   navigate("/activate-account", { state: { email: signupRequest.email } });
+      const signupPayload = {
+        email: signupRequest.email,
+        password: signupRequest.password,
+      };
+      const response = await UserControllerService.createUser(signupPayload);
+      console.log("Registration successful:", response);
+      navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error);
       if (error.response?.data) {
@@ -72,7 +81,7 @@ export default function SignUp({ mode, toggleColorMode }) {
   };
   return (
     <>
-      <NavBar mode={mode} toggleColorMode={toggleColorMode} />
+      {/* <NavBar mode={mode} toggleColorMode={toggleColorMode} /> */}
       <Box component="main" sx={{ pt: 8 }}>
         <Container
           component="main"
@@ -118,7 +127,7 @@ export default function SignUp({ mode, toggleColorMode }) {
               onSubmit={handleSubmit}
               sx={{ mt: 3, width: "100%" }}
             >
-              <TextField
+              {/* <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -129,7 +138,7 @@ export default function SignUp({ mode, toggleColorMode }) {
                 autoFocus
                 value={signupRequest.username}
                 onChange={handleInputChange}
-              />
+              /> */}
               <TextField
                 margin="normal"
                 required
@@ -154,7 +163,14 @@ export default function SignUp({ mode, toggleColorMode }) {
                 onChange={handleInputChange}
               />
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={
+                  <Checkbox
+                    value="allowTOS"
+                    color="primary"
+                    onChange={handleTOSChange}
+                    checked={toAccepted}
+                  />
+                }
                 label="I agree to all TOS."
               />
               <Button
@@ -162,12 +178,13 @@ export default function SignUp({ mode, toggleColorMode }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!toAccepted}
               >
                 Sign Up
               </Button>
               <Box sx={{ textAlign: "center" }}>
                 <Link href="/login" variant="body2">
-                  Already have an account? Sign in
+                  Already have an account? Log in
                 </Link>
               </Box>
             </Box>
