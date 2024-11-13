@@ -38,7 +38,7 @@ function Copyright(props) {
 export default function SignUp({ mode, toggleColorMode }) {
   //   const navigate = useNavigate();
   const [signupRequest, setSignupRequest] = useState({
-    // username: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -127,7 +127,7 @@ export default function SignUp({ mode, toggleColorMode }) {
               onSubmit={handleSubmit}
               sx={{ mt: 3, width: "100%" }}
             >
-              {/* <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -138,7 +138,7 @@ export default function SignUp({ mode, toggleColorMode }) {
                 autoFocus
                 value={signupRequest.username}
                 onChange={handleInputChange}
-              /> */}
+              />
               <TextField
                 margin="normal"
                 required

@@ -44,16 +44,29 @@ export default function LogIn({ mode, toggleColorMode }) {
   };
 
   const { login } = useAuth();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await UserControllerService.login(authRequest);
       localStorage.setItem("token", response.token);
-      login({ email: authRequest.email });
+      localStorage.setItem("userEmail", authRequest.email);
+      localStorage.setItem("username", response.username);
+      const userData = {
+        email: authRequest.email,
+        username: response.username,
+      };
+      // login({
+      //   email: authRequest.email,
+      //   username: response.username,
+      // });
+      login(userData);
       navigate("/dashboard");
     } catch (error) {
-      setErrorMsg(["Invalid credentials"]);
+      if (error.response?.status === 404) {
+        setErrorMsg(["User not found - please sign up first"]);
+      } else {
+        setErrorMsg(["Invalid credentials"]);
+      }
     }
   };
   return (

@@ -4,8 +4,8 @@
 /* eslint-disable */
 export type Performance = {
     maximumPermissibleAmbientTemperature?: number;
-    permissibleAxialForces?: number;
     relevantWindingTemperature?: number;
+    permissibleAxialForces?: number;
     permissibleRadialForces?: number;
     magnetization?: number;
 };

@@ -7,8 +7,8 @@ import ModeNightRoundedIcon from "@mui/icons-material/ModeNightRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 
 function ToggleColorMode({ mode, toggleColorMode }) {
-  console.log("ToggleColorMode received mode:", mode);
-  console.log("ToggleColorMode received toggleColorMode:", toggleColorMode);
+  // console.log("ToggleColorMode received mode:", mode);
+  // console.log("ToggleColorMode received toggleColorMode:", toggleColorMode);
 
   return (
     <Box sx={{ maxWidth: "32px" }}>

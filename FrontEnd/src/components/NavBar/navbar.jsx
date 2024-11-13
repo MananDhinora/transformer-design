@@ -123,7 +123,7 @@ function NavBar({ mode, toggleColorMode }) {
               {user ? (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Typography variant="body2" sx={{ color: "text.primary" }}>
-                    {user.email}
+                    {user?.username || user?.email}
                   </Typography>
                   <IconButton
                     size="large"

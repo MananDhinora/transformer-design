@@ -51,8 +51,8 @@ function ThemedApp() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
-        <AuthProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <AuthProvider>
             <Routes>
               <Route
                 path="/*"
@@ -94,8 +94,8 @@ function ThemedApp() {
                 }
               />
             </Routes>
-          </BrowserRouter>
-        </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </CssBaseline>
     </ThemeProvider>
   );
