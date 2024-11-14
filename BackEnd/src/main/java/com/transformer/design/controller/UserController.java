@@ -96,7 +96,7 @@ public class UserController {
             String jwt = token.substring(7);
             String userEmail = jwtService.extractEmail(jwt);
             UserData user = userRepository.findByEmail(userEmail);
-
+            log.info("JWT: ", jwt + "USEREMAIL:", userEmail + "USER:", user);
             if (user != null && jwtService.isTokenValid(jwt, user)) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("email", user.getEmail());
@@ -108,4 +108,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 }
