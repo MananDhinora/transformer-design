@@ -30,7 +30,7 @@ public class UserData implements UserDetails {
 
     @Id
     private final String id;
-
+    @Indexed(unique = true)
     private final String email;
 
     private final String password;

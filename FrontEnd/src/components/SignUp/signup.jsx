@@ -12,10 +12,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserControllerService } from "../../middleware-api";
+import useStore from "../../stores/Store";
 
 function Copyright(props) {
   return (
@@ -35,48 +34,48 @@ function Copyright(props) {
   );
 }
 
-export default function SignUp({ mode, toggleColorMode }) {
+export default function SignUp() {
   //   const navigate = useNavigate();
+
+  const signup = useStore((state) => state.signup);
   const [signupRequest, setSignupRequest] = useState({
     username: "",
     email: "",
     password: "",
   });
   const [errorMsg, setErrorMsg] = useState([]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSignupRequest((prev) => ({ ...prev, [name]: value }));
-  };
   const navigate = useNavigate();
 
   const [toAccepted, setTOSAccepted] = useState(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSignupRequest((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   const handleTOSChange = (event) => {
     setTOSAccepted(event.target.checked);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrorMsg([]);
+    console.log("Signup attempt:", signupRequest);
 
     try {
-      const signupPayload = {
-        email: signupRequest.email,
-        password: signupRequest.password,
-      };
-      const response = await UserControllerService.createUser(signupPayload);
-      console.log("Registration successful:", response);
+      await signup(
+        signupRequest.email,
+        signupRequest.password,
+        signupRequest.username
+      );
+      console.log("Signup successful");
       navigate("/login");
     } catch (error) {
-      console.error("Registration failed:", error);
-      if (error.response?.data) {
-        if (error.response.data.validationErrors) {
-          setErrorMsg(error.response.data.validationErrors);
-        } else {
-          setErrorMsg([error.response.data.errorMsg]);
-        }
-      } else {
-        setErrorMsg(["An unexpected error occurred"]);
-      }
+      console.error("Signup error:", error);
+      setErrorMsg([
+        error.status === 409
+          ? "An account with this email or username already exists"
+          : error.message || "Signup failed",
+      ]);
     }
   };
   return (
@@ -195,8 +194,3 @@ export default function SignUp({ mode, toggleColorMode }) {
     </>
   );
 }
-// Props validation
-SignUp.propTypes = {
-  mode: PropTypes.oneOf(["light", "dark"]).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};

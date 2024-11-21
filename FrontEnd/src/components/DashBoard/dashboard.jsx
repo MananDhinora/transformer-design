@@ -1,11 +1,17 @@
-import { Button, Container, Stack } from "@mui/material";
-import PropTypes from "prop-types";
-import NavBar from "../NavBar/navbar";
-function DashBoard({ mode, toggleColorMode }) {
+import { Button, Container, Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
+import useStore from "../../stores/Store";
+export default function Dashboard() {
+  const user = useStore((state) => state.user);
+
+  useEffect(() => {
+    console.log("Dashboard mounted, user:", user);
+  }, [user]);
+
   return (
     <>
-      <NavBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Container maxWidth="md" sx={{ mt: "15" }}>
+      {/* <NavBar /> */}
+      <Container maxWidth="md" sx={{ mt: 15 }}>
         <Stack
           spacing={2}
           sx={{
@@ -17,6 +23,7 @@ function DashBoard({ mode, toggleColorMode }) {
             height: "100vh",
           }}
         >
+          <Typography variant="h4">Welcome {user?.username}</Typography>
           <Button variant="contained" fullWidth>
             Create Design
           </Button>
@@ -31,10 +38,3 @@ function DashBoard({ mode, toggleColorMode }) {
     </>
   );
 }
-// Props validation
-DashBoard.propTypes = {
-  mode: PropTypes.string.isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};
-
-export default DashBoard;

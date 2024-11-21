@@ -11,10 +11,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import ToggleColorMode from "../ThemeToggle/themetoggle";
 
 const logoStyle = {
@@ -23,8 +21,24 @@ const logoStyle = {
   cursor: "pointer",
 };
 
-function NavBar({ mode, toggleColorMode }) {
-  const { user, logout } = useAuth();
+import useStore from "../../stores/Store";
+
+export default React.memo(function NavBar() {
+  const mode = useStore((state) => state.mode);
+  const toggleColorMode = useStore((state) => state.toggleColorMode);
+  const user = useStore((state) => state.user);
+  const logout = useStore((state) => state.logout);
+  const navigate = useNavigate();
+
+  console.log("Current theme mode:", mode);
+  console.log("User state:", user);
+
+  const handleLogout = () => {
+    console.log("Logging out user");
+    logout();
+    navigate("/login");
+  };
+
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -36,9 +50,9 @@ function NavBar({ mode, toggleColorMode }) {
     setAnchorEl(null);
   };
 
-  const toggleDrawer = (newOpen) => () => {
+  const toggleDrawer = React.useCallback((newOpen) => {
     setOpen(newOpen);
-  };
+  }, []);
 
   return (
     <div>
@@ -161,7 +175,7 @@ function NavBar({ mode, toggleColorMode }) {
                     <MenuItem
                       onClick={() => {
                         handleClose();
-                        logout();
+                        handleLogout();
                       }}
                     >
                       Logout
@@ -196,12 +210,23 @@ function NavBar({ mode, toggleColorMode }) {
                 variant="text"
                 color="primary"
                 aria-label="menu"
-                onClick={toggleDrawer(true)}
+                onClick={() => toggleDrawer(!open)}
                 sx={{ minWidth: "30px", p: "4px" }}
               >
                 <MenuIcon />
               </Button>
-              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Drawer
+                anchor="right"
+                open={open}
+                onClose={() => toggleDrawer(false)}
+                sx={{
+                  "& .MuiDrawer-paper": {
+                    marginTop: "80px", // Adds space below the AppBar
+                    height: "calc(100% - 80px)", // Adjusts height to account for AppBar
+                    zIndex: (theme) => theme.zIndex.drawer + 5, // Ensures drawer is above AppBar
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     minWidth: "60dvw",
@@ -226,11 +251,11 @@ function NavBar({ mode, toggleColorMode }) {
                   <MenuItem component={RouterLink} to="/">
                     Home
                   </MenuItem>
-                  {user && (
-                    <MenuItem component={RouterLink} to="/dashboard">
-                      Dashboard
-                    </MenuItem>
-                  )}
+
+                  <MenuItem component={RouterLink} to="/dashboard">
+                    Dashboard
+                  </MenuItem>
+
                   <Divider />
                   {user ? (
                     <>
@@ -238,7 +263,7 @@ function NavBar({ mode, toggleColorMode }) {
                         Profile
                       </MenuItem>
                       <MenuItem>My Account</MenuItem>
-                      <MenuItem onClick={logout}>Logout</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </>
                   ) : (
                     <>
@@ -274,11 +299,4 @@ function NavBar({ mode, toggleColorMode }) {
       </AppBar>
     </div>
   );
-}
-
-NavBar.propTypes = {
-  mode: PropTypes.oneOf(["dark", "light"]).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};
-
-export default NavBar;
+});

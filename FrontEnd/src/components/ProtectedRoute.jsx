@@ -1,18 +1,25 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
 import PropTypes from "prop-types";
+import { memo } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import tokenService from "../middleware-api/token/tokenService";
+import useStore from "../stores/Store";
 
-export const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
+const ProtectedRoute = memo(({ children }) => {
+  const location = useLocation();
+  const user = useStore((state) => state.user);
+  const isTokenValid = tokenService.isTokenValid();
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (!user || !isTokenValid) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
-};
+});
+
+ProtectedRoute.displayName = "ProtectedRoute";
 
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export { ProtectedRoute };
