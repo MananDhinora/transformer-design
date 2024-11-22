@@ -110,6 +110,7 @@ export default React.memo(function NavBar() {
                   component={RouterLink}
                   to="/"
                   sx={{ py: "6px", px: "12px" }}
+                  onClick={() => toggleDrawer(false)}
                 >
                   <Typography variant="body2" color="text.primary">
                     Home
@@ -119,6 +120,7 @@ export default React.memo(function NavBar() {
                   component={RouterLink}
                   to="/dashboard"
                   sx={{ py: "6px", px: "12px" }}
+                  onClick={() => toggleDrawer(false)}
                 >
                   <Typography variant="body2" color="text.primary">
                     Dashboard
@@ -248,11 +250,19 @@ export default React.memo(function NavBar() {
                       toggleColorMode={toggleColorMode}
                     />
                   </Box>
-                  <MenuItem component={RouterLink} to="/">
+                  <MenuItem
+                    component={RouterLink}
+                    to="/"
+                    onClick={() => toggleDrawer(false)}
+                  >
                     Home
                   </MenuItem>
 
-                  <MenuItem component={RouterLink} to="/dashboard">
+                  <MenuItem
+                    component={RouterLink}
+                    to="/dashboard"
+                    onClick={() => toggleDrawer(false)}
+                  >
                     Dashboard
                   </MenuItem>
 
@@ -274,6 +284,7 @@ export default React.memo(function NavBar() {
                           component={RouterLink}
                           to="/signup"
                           sx={{ width: "100%" }}
+                          onClick={() => toggleDrawer(false)}
                         >
                           Sign up
                         </Button>
@@ -284,6 +295,7 @@ export default React.memo(function NavBar() {
                           variant="outlined"
                           component={RouterLink}
                           to="/login"
+                          onClick={() => toggleDrawer(false)}
                           sx={{ width: "100%" }}
                         >
                           Log in

@@ -1,4 +1,9 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import {
+  CircularProgress,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -37,7 +42,25 @@ const getDesignTokens = (mode) => ({
 function ThemedApp() {
   const mode = useStore((state) => state.mode);
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
+  const loading = useStore((state) => state.loading);
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        </CssBaseline>
+      </ThemeProvider>
+    );
+  }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>

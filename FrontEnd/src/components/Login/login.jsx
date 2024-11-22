@@ -36,6 +36,7 @@ export default function Login() {
   const navigate = useNavigate();
   const login = useStore((state) => state.login);
   const error = useStore((state) => state.error);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [authRequest, setAuthRequest] = useState({
     email: "",
@@ -44,19 +45,25 @@ export default function Login() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Input Change - ${name}: ${value}`);
     setAuthRequest((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Login form submitted with:", authRequest);
     console.log("Login attempt:", authRequest.email, authRequest.password);
+    setIsLoading(true);
 
     try {
-      await login(authRequest.email, authRequest.password);
+      const response = await login(authRequest.email, authRequest.password);
+      console.log("Login response:", response); // Log the response
       const from = location.state?.from?.pathname || "/dashboard";
-      console.log("Login successful");
+      console.log("Login successful, navigating to:", from);
       navigate(from, { replace: true });
     } catch (err) {
       console.error("Login failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (

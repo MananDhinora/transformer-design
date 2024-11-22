@@ -9,13 +9,17 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const authHeader = tokenService.getAuthorizationHeader();
+    console.log("Adding Authorization Header:", authHeader); // Debug statement
     if (authHeader) {
-      console.log("Adding auth header to request");
       config.headers["Authorization"] = authHeader;
     }
+    console.log("Request Config:", config); // Debug statement
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error("Request Interceptor Error:", error); // Debug statement
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;
