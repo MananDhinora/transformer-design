@@ -1,3 +1,8 @@
+/**
+ * The main entry point of the React application.
+ * Handles routing, authentication, and loading state.
+ */
+
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/DashBoard/dashboard";
@@ -5,7 +10,6 @@ import Home from "./components/Home/home";
 import Login from "./components/Login/login";
 import NavBar from "./components/NavBar/navbar";
 import NotFound from "./components/NotFound/NotFound";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import SignUp from "./components/SignUp/signup";
 import tokenService from "./middleware-api/token/tokenService";
 import useStore from "./stores/Store";
@@ -19,22 +23,13 @@ function App() {
   const loading = useStore((state) => state.loading);
 
   useEffect(() => {
-    console.log("APP COMPONENT INITIAL EFFECT");
     let mounted = true;
 
     const attemptAutoLogin = async () => {
-      console.log("ATTEMPTING AUTO-LOGIN", {
-        mounted,
-        autoLoginAttempted,
-        token: !!token,
-        user: !!user,
-      });
-
       try {
         const token = tokenService.token;
 
         if (!token) {
-          console.warn("NO TOKEN FOR AUTO-LOGIN");
           if (mounted) {
             setAutoLoginAttempted(true);
           }
@@ -42,7 +37,6 @@ function App() {
         }
 
         if (!tokenService.isTokenValid()) {
-          console.warn("TOKEN NOT VALID");
           tokenService.clearToken();
           if (mounted) {
             setAutoLoginAttempted(true);
@@ -50,14 +44,10 @@ function App() {
           return;
         }
 
-        console.log("CALLING AUTO LOGIN METHOD");
         const success = await autoLogin();
 
         if (mounted) {
-          console.log("AUTO-LOGIN SUCCESS:", success);
-
           if (!success) {
-            console.error("AUTO-LOGIN VALIDATION FAILED");
             tokenService.clearToken();
             setLoginError("Auto-login failed");
           }
@@ -65,8 +55,6 @@ function App() {
           setAutoLoginAttempted(true);
         }
       } catch (error) {
-        console.error("CRITICAL AUTO-LOGIN ERROR IN APP:", error);
-
         if (mounted) {
           tokenService.clearToken();
           setLoginError(error.message || "Auto-login failed");
@@ -111,9 +99,11 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            user && token && tokenService.isTokenValid() ? (
               <Dashboard />
-            </ProtectedRoute>
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         {/* <Route path="/profile" element={
@@ -122,7 +112,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/settings" element={
-          <ProtectedRoute>
+          <ProtectedRoute>a
             <Settings />
           </ProtectedRoute>
         } /> */}

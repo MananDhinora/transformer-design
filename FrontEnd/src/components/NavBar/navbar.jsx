@@ -30,11 +30,7 @@ export default React.memo(function NavBar() {
   const logout = useStore((state) => state.logout);
   const navigate = useNavigate();
 
-  console.log("Current theme mode:", mode);
-  console.log("User state:", user);
-
   const handleLogout = () => {
-    console.log("Logging out user");
     logout();
     navigate("/login");
   };

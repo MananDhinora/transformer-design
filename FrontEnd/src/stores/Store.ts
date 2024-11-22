@@ -1,4 +1,11 @@
-// stores/Store.ts
+/**
+ * The `useStore` function is a Zustand store that manages the state of an authentication system.
+ * It provides methods for logging in, signing up, logging out, and validating the user's token.
+ * The store also manages the user's theme mode (light or dark) and any errors that occur during authentication.
+ *
+ * The store uses the `zustand/middleware` package to persist the user's data in localStorage.
+ */
+
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { UserControllerService } from "../middleware-api";
@@ -42,7 +49,7 @@ const getInitialUser = () => {
     return null;
   }
 };
-console.log("getInitialUser: ", getInitialUser());
+
 const useStore = create<AuthStore>()(
   persist(
     (set, get) => ({
@@ -54,15 +61,13 @@ const useStore = create<AuthStore>()(
 
       login: async (email, password) => {
         set({ loading: true, error: null });
-        console.log("Attempting login with email:", email);
+
         try {
           const response = await UserControllerService.login({
             email,
             password,
           });
-          console.log("Login response:", response);
-          // set({ token: response.token });
-          // console.log("User token:", { token: response.token });
+
           // Assuming response contains token and user info
           tokenService.token = response.token;
 
@@ -75,10 +80,6 @@ const useStore = create<AuthStore>()(
             },
             loading: false,
           });
-          console.log("User state set:", {
-            email: response.email,
-            username: response.username,
-          }); // Log user state
         } catch (error: any) {
           console.error("Login error:", error);
           set({
@@ -133,7 +134,7 @@ const useStore = create<AuthStore>()(
           const response = await UserControllerService.validateToken(
             `Bearer ${token}`
           );
-          console.log("validateToken response:", response); // Add debug log
+          // Add debug log
           if (response && response.user) {
             // Check for response.user
             set({ user: response.user });
@@ -154,11 +155,9 @@ const useStore = create<AuthStore>()(
         }
       },
       autoLogin: async () => {
-        console.log("START autoLogin method");
         set({ loading: true, error: null });
         try {
           const token = tokenService.token;
-          console.log("Auto-login - Token:", token);
 
           if (!token) {
             console.warn("NO TOKEN FOUND");
@@ -183,15 +182,11 @@ const useStore = create<AuthStore>()(
             return false;
           }
 
-          console.log("ATTEMPTING TOKEN VALIDATION");
           const response = await UserControllerService.validateToken(
             `Bearer ${token}`
           );
 
-          console.log("TOKEN VALIDATION RESPONSE:", JSON.stringify(response));
-
           if (response && response.email) {
-            console.log("SETTING USER STATE");
             const userState = {
               email: response.email,
               username: response.username,
@@ -204,10 +199,6 @@ const useStore = create<AuthStore>()(
               error: null,
             });
 
-            console.log(
-              "USER STATE SET:",
-              JSON.stringify(useStore.getState().user)
-            );
             return true;
           }
 
@@ -231,7 +222,6 @@ const useStore = create<AuthStore>()(
           });
           return false;
         } finally {
-          console.log("END autoLogin method");
         }
       },
 

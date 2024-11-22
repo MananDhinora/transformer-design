@@ -9,11 +9,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const authHeader = tokenService.getAuthorizationHeader();
-    console.log("Adding Authorization Header:", authHeader); // Debug statement
+
     if (authHeader) {
       config.headers["Authorization"] = authHeader;
     }
-    console.log("Request Config:", config); // Debug statement
+
     return config;
   },
   (error) => {

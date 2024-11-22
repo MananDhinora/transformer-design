@@ -10,9 +10,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import useAuthStore from "../../stores/authStore";
-import { useState } from "react";
+import tokenService from "../../middleware-api/token/tokenService";
 import useStore from "../../stores/Store";
 
 function Copyright(props) {
@@ -36,6 +36,8 @@ export default function Login() {
   const navigate = useNavigate();
   const login = useStore((state) => state.login);
   const error = useStore((state) => state.error);
+  const user = useStore((state) => state.user);
+  const token = useStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
 
   const [authRequest, setAuthRequest] = useState({
@@ -45,27 +47,30 @@ export default function Login() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Input Change - ${name}: ${value}`);
+
     setAuthRequest((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Login form submitted with:", authRequest);
-    console.log("Login attempt:", authRequest.email, authRequest.password);
+
     setIsLoading(true);
 
     try {
       const response = await login(authRequest.email, authRequest.password);
       console.log("Login response:", response); // Log the response
-      const from = location.state?.from?.pathname || "/dashboard";
-      console.log("Login successful, navigating to:", from);
-      navigate(from, { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error("Login failed:", err);
     } finally {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (user && token && tokenService.isTokenValid()) {
+      console.log("User already authenticated, redirecting to dashboard");
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, token, navigate]);
   return (
     <Box component="main" sx={{ pt: 8 }}>
       <Container

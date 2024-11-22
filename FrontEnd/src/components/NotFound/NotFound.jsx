@@ -14,7 +14,7 @@ export default function NotFound() {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Box
         sx={{
           display: "flex",

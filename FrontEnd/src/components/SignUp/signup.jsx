@@ -59,7 +59,6 @@ export default function SignUp() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Signup attempt:", signupRequest);
 
     try {
       await signup(
@@ -67,10 +66,9 @@ export default function SignUp() {
         signupRequest.password,
         signupRequest.username
       );
-      console.log("Signup successful");
+
       navigate("/login");
     } catch (error) {
-      console.error("Signup error:", error);
       setErrorMsg([
         error.status === 409
           ? "An account with this email or username already exists"
