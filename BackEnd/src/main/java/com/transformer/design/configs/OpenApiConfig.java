@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 description = "API for user authentication and registration"
         ),
         servers = {
-            @Server(description = "Local ENV", url = "http://localhost:8088/"),},
+            @Server(description = "Local ENV", url = "http://localhost:8080/"),},
         security = {
             @SecurityRequirement(name = "bearerAuth")}
 )

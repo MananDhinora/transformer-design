@@ -44,7 +44,7 @@ public class Security {
     private HttpSecurity getHttpSecurity6v(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/auth/**", "/v2/api-docs",
+                        authorize -> authorize.requestMatchers("/auth/**", "/auth/validate-token", "/v2/api-docs",
                                 "/v3/api-docs", "/v3/api-docs/**",
                                 "/swagger-resources",
                                 "/swagger-resources/**",

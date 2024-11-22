@@ -37,4 +37,20 @@ export class UserControllerService {
             mediaType: 'application/json',
         });
     }
+    /**
+     * @param authorization
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static validateToken(
+        authorization: string,
+    ): CancelablePromise<Record<string, any>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/auth/validate-token',
+            headers: {
+                'Authorization': authorization,
+            },
+        });
+    }
 }

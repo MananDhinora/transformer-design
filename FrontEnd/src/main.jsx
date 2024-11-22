@@ -1,15 +1,17 @@
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import {
+  CircularProgress,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import DosisFont from "../Fonts/Dosis/Dosis-VariableFont_wght.ttf";
 import App from "./App";
-import DashBoard from "./components/DashBoard/dashboard";
-import LogIn from "./components/Login/login";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import SignUp from "./components/SignUp/signup";
-import { AuthProvider } from "./context/AuthContext";
-// import "./index.css";
+import ErrorBoundary from "./components/ErrorBoundary";
+import useStore from "./stores/Store";
+
 const getDesignTokens = (mode) => ({
   palette: {
     mode,
@@ -38,68 +40,40 @@ const getDesignTokens = (mode) => ({
 });
 
 function ThemedApp() {
-  const [mode, setMode] = React.useState("dark");
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-      },
-    }),
-    []
-  );
+  const mode = useStore((state) => state.mode);
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  const loading = useStore((state) => state.loading);
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        </CssBaseline>
+      </ThemeProvider>
+    );
+  }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
-        <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/*"
-                element={
-                  <App
-                    mode={mode}
-                    toggleColorMode={colorMode.toggleColorMode}
-                  />
-                }
-              />
-              <Route
-                path="/signup"
-                element={
-                  <SignUp
-                    mode={mode}
-                    toggleColorMode={colorMode.toggleColorMode}
-                  />
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <LogIn
-                    mode={mode}
-                    toggleColorMode={colorMode.toggleColorMode}
-                  />
-                }
-              />
-              {/* <Route path="/tests" element={<CADViewer />} /> */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashBoard
-                      mode={mode}
-                      toggleColorMode={colorMode.toggleColorMode}
-                    />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
+        <BrowserRouter>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </BrowserRouter>
       </CssBaseline>
     </ThemeProvider>
   );
 }
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

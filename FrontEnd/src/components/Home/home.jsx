@@ -1,11 +1,15 @@
 import { Box, Container, Typography } from "@mui/material";
-import PropTypes from "prop-types";
-import NavBar from "../NavBar/navbar";
+// import useStore from "../../stores/Store";
+// import NavBar from "../NavBar/navbar";
+function Home() {
+  // const themeState = useStore((state) => ({
+  //   mode: state.mode,
+  //   toggleColorMode: state.toggleColorMode,
+  // }));
 
-function Home({ mode, toggleColorMode }) {
   return (
     <>
-      <NavBar mode={mode} toggleColorMode={toggleColorMode} />
+      {/* <NavBar {...themeState} /> */}
 
       <Box component="main" sx={{ mt: 8, textAlign: "center", pt: 8 }}>
         <Container maxWidth="lg">
@@ -17,10 +21,5 @@ function Home({ mode, toggleColorMode }) {
     </>
   );
 }
-// Props validation
-Home.propTypes = {
-  mode: PropTypes.oneOf(["dark", "light"]).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};
 
 export default Home;

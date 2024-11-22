@@ -3,8 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Assumed } from './Assumed';
+import type { Clearance } from './Clearance';
 import type { Core } from './Core';
 import type { HV_winding } from './HV_winding';
+import type { Insulation } from './Insulation';
 import type { LV_winding } from './LV_winding';
 import type { MaterialCost } from './MaterialCost';
 import type { Performance } from './Performance';
@@ -17,6 +19,8 @@ export type DefaultValues = {
     tank?: Tank;
     performance?: Performance;
     materialCost?: MaterialCost;
+    clearance?: Clearance;
+    insulation?: Insulation;
     lvwelding?: LV_winding;
     hvwinding?: HV_winding;
 };
