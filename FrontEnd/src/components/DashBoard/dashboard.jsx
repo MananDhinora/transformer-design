@@ -15,13 +15,14 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import useStore from "../../stores/Store";
 
 export default function Dashboard() {
   const theme = useTheme();
   const user = useStore((state) => state.user);
   const setMode = useStore((state) => state.setMode);
-
+  const navigate = useNavigate();
   return (
     <Container
       maxWidth="sm"
@@ -118,7 +119,7 @@ export default function Dashboard() {
                   variant="contained"
                   fullWidth
                   startIcon={<DefaultIcon />}
-                  onClick={setMode}
+                  onClick={() => navigate("/set-default-values")}
                   sx={{
                     py: 1.5,
                     borderRadius: 2,

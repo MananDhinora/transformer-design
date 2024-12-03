@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/DashBoard/dashboard";
+import DefaultValues from "./components/DefaultValues/DefaultValues";
 import Home from "./components/Home/home";
 import Login from "./components/Login/login";
 import NavBar from "./components/NavBar/navbar";
@@ -101,6 +102,16 @@ function App() {
           element={
             user && token && tokenService.isTokenValid() ? (
               <Dashboard />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/set-default-values"
+          element={
+            user && token && tokenService.isTokenValid() ? (
+              <DefaultValues />
             ) : (
               <Navigate to="/login" replace />
             )

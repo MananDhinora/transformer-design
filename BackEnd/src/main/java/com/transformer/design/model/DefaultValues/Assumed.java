@@ -7,18 +7,17 @@ import lombok.Data;
 @Builder
 public class Assumed {
 
-    private Float StackingFactor;
+  private Float StackingFactor;
 
-    private Float SpaceFactor;
+  private Float SpaceFactor;
 
-    private Float CopperDensity;
+  private Float CopperDensity;
 
-    private Float AluminumDensity;
+  private Float AluminumDensity;
 
-    private Float CUSpecificResistance;
+  private Float CUSpecificResistance;
 
-    private Float ALSpecificResistance;
+  private Float ALSpecificResistance;
 
-    private Float SpecificWeightOil;
-
+  private Float SpecificWeightOil;
 }
