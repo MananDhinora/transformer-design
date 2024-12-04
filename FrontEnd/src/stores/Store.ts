@@ -59,7 +59,7 @@ const useStore = create<AuthStore>()(
       error: null,
       token: null,
 
-      login: async (email, password) => {
+      login: async (email: string, password: string) => {
         set({ loading: true, error: null });
 
         try {
@@ -76,6 +76,7 @@ const useStore = create<AuthStore>()(
             user: {
               email: response.email,
               username: response.username,
+              id: response.userId,
               // roles: response.roles,
             },
             loading: false,
@@ -90,7 +91,6 @@ const useStore = create<AuthStore>()(
           throw error;
         }
       },
-
       signup: async (email: string, password: string, username: string) => {
         set({ loading: true, error: null });
         try {

@@ -7,32 +7,31 @@ import lombok.Data;
 @Builder
 public class Core {
 
-    private Float CommonBlockThickness;
+  private Float CommonBlockThickness;
 
-    private Float MSPressurePlateThickness;
+  private Float MSPressurePlateThickness;
 
-    private Float CommonRingThickness;
+  private Float CommonRingThickness;
 
-    private Float CoreDiameter;
+  private Float CoreDiameter;
 
-    private Float WindowFactor;
+  private Float WindowFactor;
 
-    private Float RatioWindow; // Height/width
+  private Float RatioWindow; // Height/width
 
-    private Float CoreLossHandlingFactor; // A/c
+  private Float CoreLossHandlingFactor; // A/c
 
-    private Float CoreDensity; // gm/cc
+  private Float CoreDensity; // gm/cc
 
-    private Float HVToYokeClearance;
+  private Float HVToYokeClearance;
 
-    private Float HVDiscSpacerThickness;
+  private Float HVDiscSpacerThickness;
 
-    private Float PhaseToPhaseClearance;
+  private Float PhaseToPhaseClearance;
 
-    private Float LVToHVClearance;
+  private Float LVToHVClearance;
 
-    private Float LVToYokeClearance;
+  private Float LVToYokeClearance;
 
-    private Float CoreToLVClearance;
-
+  private Float CoreToLVClearance;
 }

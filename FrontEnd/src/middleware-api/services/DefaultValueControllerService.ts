@@ -16,7 +16,7 @@ export class DefaultValueControllerService {
         requestBody: DefaultValuesDTO,
     ): CancelablePromise<Record<string, any>> {
         return __request(OpenAPI, {
-            method: 'POST',
+            method: 'PUT',
             url: '/default/setValue',
             body: requestBody,
             mediaType: 'application/json',

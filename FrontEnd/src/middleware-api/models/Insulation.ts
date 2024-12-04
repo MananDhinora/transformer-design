@@ -2,4 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Insulation = Record<string, any>;
+export type Insulation = {
+    endBlock?: number;
+    lvlayerInsulation?: number;
+    hvconductor?: number;
+    hvlayerInsulation?: number;
+    lvconductor?: number;
+};
+
