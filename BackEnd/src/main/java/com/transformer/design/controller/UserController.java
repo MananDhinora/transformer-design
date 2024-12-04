@@ -86,6 +86,7 @@ public class UserController {
       response.put("expirationTime", jwtService.getExpirationTime());
       response.put("username", authenticatedUser.getUsername());
       response.put("email", authenticatedUser.getEmail());
+      response.put("userId", authenticatedUser.getId());
       return ResponseEntity.ok(response);
     } catch (UsernameNotFoundException e) {
       log.error("User {} not found, error:", loginUserDTO.getEmail(), e);

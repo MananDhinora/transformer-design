@@ -4,6 +4,7 @@
 /* eslint-disable */
 import tokenService from "../token/tokenService";
 import type { ApiRequestOptions } from "./ApiRequestOptions";
+
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 type Headers = Record<string, string>;
 

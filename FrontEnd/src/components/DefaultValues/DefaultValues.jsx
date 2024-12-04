@@ -18,14 +18,16 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DefaultValueControllerService } from "../../middleware-api";
+import useStore from "../../stores/Store";
+import SuccessIndicator from "../common/SuccessIndicator";
 
 const DefaultValues = () => {
   const theme = useTheme();
   const [defaultValues, setDefaultValues] = useState(null);
   const [editedValues, setEditedValues] = useState({});
-  const parentRef = useRef();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchValues = async () => {
@@ -53,15 +55,28 @@ const DefaultValues = () => {
   };
 
   const handleSave = async () => {
+    const userId = useStore.getState().user.id;
     try {
+      // Create a deep copy of defaultValues
+      const updatedValues = JSON.parse(JSON.stringify(defaultValues));
+
+      // Merge edited values while preserving structure
+      Object.keys(editedValues).forEach((category) => {
+        Object.keys(editedValues[category]).forEach((key) => {
+          updatedValues[category][key] = editedValues[category][key];
+        });
+      });
+
       await DefaultValueControllerService.setValue({
         valueType: "standard_type",
-        defaultValues: {
-          ...defaultValues,
-          ...editedValues,
-        },
+        userId: userId,
+        defaultValues: updatedValues,
       });
-      // Show success message
+
+      setShowSuccess(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error("Error saving values:", error);
     }
@@ -176,6 +191,11 @@ const DefaultValues = () => {
           </Button>
         </Box>
       </Paper>
+      <SuccessIndicator
+        open={showSuccess}
+        message="Values updated successfully!"
+        onClose={() => setShowSuccess(false)}
+      />
     </Container>
   );
 };
